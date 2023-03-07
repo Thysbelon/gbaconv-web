@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<head>
+<meta charset=utf-8>
+<title>GBA srm converter</title>
+<meta name=color-scheme content=dark>
+<script src=gbaconv-web.js></script>
+</head>
+<body>
+<h1>This tool doesn't work</h1>
+<label for=savpicker>Select save file:</label>
+<input type=file id=savpicker accept=.srm,.sav,.4gs>
+<script>
+const savpicker=document.getElementById("savpicker")
+savpicker.addEventListener('change', myClick);
+function myClick(e){
+	// replace 4gs with srm
+	// replace whatever the file name is with savedata, c can't handle paths with spaces !!!!
+	// c can't write to any directory other than the mounted one !!!!
+	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace("4gs", "srm")
+	console.log(filename)
+	const reader=new FileReader();
+	reader.readAsArrayBuffer(e.target.files[0]);
+	reader.onloadend = (evt) => {
+		if (evt.target.readyState === FileReader.DONE) {
+			let arrayBuffer = evt.target.result
+			var array = new Uint8Array(arrayBuffer);
+			FS.mkdir('/data');
+			FS.mount(IDBFS, {}, '/data');
+			//FS.syncfs(true, function (err) {
+			//	// handle callback
+			//	console.log("syncfs error: "+err);
+			//});
+			Module.ccall(
+				"GBAConv",
+				"number",
+				["number", "number", "string"],
+				[array, array.length, filename]
+			)
+			FS.syncfs(false, function (err) {
+				// handle callback
+				console.log("syncFS 2 error: "+err);
+			})
+			if (filename.includes("srm")){filename=filename.replace("srm", "sav")} else {filename=filename.replace("sav", "srm")}
+			let db;
+			const request = indexedDB.open("/data");
+			request.onsuccess = (event) => {
+				db = event.target.result;
+				db.transaction("FILE_DATA").objectStore("FILE_DATA").get( "/"+filename ).onsuccess = (event) => {
+					var savedataObj=event.target.result.contents
+					savedataValues=Object.values(savedataObj) // array
+					//const buffer=new ArrayBuffer(romdataValues.length)
+					//const view = new Uint8Array(buffer);
+					const savedata8array = Uint8Array.from(savedataValues);
+					
+					const file = new File([savedata8array], e.target.files[0].name.replace(/\.\w\w\w/, "."+filename.slice(-3) ) )
+					download(file)
+				};
+			};
+		}
+	}
+	
+}
+
+//function exportfiles(){
+//	let db;
+//	const request = indexedDB.open("cjFS_/files/");
+//	request.onsuccess = (event) => {
+//		db = event.target.result;
+//		/*db.transaction("files").objectStore("files").get("test-output.gbc").onsuccess = (event) => {
+//			var romdataObj=event.target.result.contents
+//			romdataValues=Object.values(romdataObj) // array
+//			//const buffer=new ArrayBuffer(romdataValues.length)
+//			//const view = new Uint8Array(buffer);
+//			const romdata8array = Uint8Array.from(romdataValues);
+//			
+//			const file = new File([romdata8array], 'test-output.gbc')
+//			download(file)
+//		};*/
+//		db.transaction("files").objectStore("files").getAll().onsuccess = (event) => {
+//			files=event.target.result
+//			filenames=files[0].contents
+//			files.shift()
+//			for (let i=0, l=files.length; i<l; i++) {
+//				const file = new File([files[i].contents], filenames[i].substring(1))
+//				download(file)
+//			}
+//			/*var romdataObj=event.target.result.contents
+//			romdataValues=Object.values(romdataObj) // array
+//			const romdata8array = Uint8Array.from(romdataValues);
+//			
+//			const file = new File([romdata8array], 'test-output.gbc')
+//			download(file)*/
+//		};
+//	};
+//
+//}
+
+function download(file) {
+	const link = document.createElement('a')
+	const url = URL.createObjectURL(file)
+	
+	link.href = url
+	link.download = file.name
+	document.body.appendChild(link)
+	link.click()
+	
+	document.body.removeChild(link)
+	window.URL.revokeObjectURL(url)
+}
+</script>
