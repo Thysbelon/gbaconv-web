@@ -1,13 +1,12 @@
 #include <stdint.h>
 #include <stdio.h>
-//#ifndef __CELLOS_LV2__
-//#include <getopt.h>
-//#endif
+#ifndef __CELLOS_LV2__
+#include <getopt.h>
+#endif
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <emscripten.h>
 
 enum save_type { EEPROM_512B,
@@ -129,16 +128,18 @@ static void dump_sav(FILE* file, const uint8_t* data, enum save_type type)
 
 // One shot cowboy code :)
 
-/*int OriginalMain(int argc, char* argv[])
+EMSCRIPTEN_KEEPALIVE
+int GBAConv(char* filename)
 {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-        return 1;
-    }
+	printf("file \"%s\"\n", filename);
+    //if (argc != 2) {
+    //    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+    //    return 1;
+    //}
 
-    FILE* file = fopen(argv[1], "rb");
+    FILE* file = fopen(filename, "rb");
     if (!file) {
-        fprintf(stderr, "Failed to open file \"%s\"\n", argv[1]);
+        fprintf(stderr, "Failed to open file \"%s\"\n", filename);
         goto error;
     }
 
@@ -155,7 +156,7 @@ static void dump_sav(FILE* file, const uint8_t* data, enum save_type type)
     fclose(file);
     file = NULL;
 
-    char* out_path = strdup(argv[1]);
+    char* out_path = strdup(filename);
     char* split = strrchr(out_path, '.');
     const char* ext = NULL;
 
@@ -199,99 +200,5 @@ static void dump_sav(FILE* file, const uint8_t* data, enum save_type type)
 error:
     if (file)
         fclose(file);
-    return 1;
-}*/
-
-EMSCRIPTEN_KEEPALIVE
-int GBAConv(uint8_t* inputfiledata, long len, char* filename)
-{
-    //if (argc != 2) {
-    //    printf(stderr, "Usage: %s <file>\n", argv[0]);
-    //    return 1;
-    //}
-
-    //FILE* file = fopen(argv[1], "rb");
-    //if (!file) {
-    //    printf("Failed to open file\n");
-    //    goto error;
-    //}
-
-    //fseek(file, 0, SEEK_END);
-    //long len = ftell(file);
-    //rewind(file);
-
-    //uint8_t* buffer = malloc(len);
-	uint8_t* buffer;
-	buffer=inputfiledata;
-	printf("buffer address: %p\n", buffer);
-	printf("buffer1: %i\n", buffer[1]);
-	printf("buffer2: %i\n", buffer[2]);
-	printf("buffer3: %i\n", buffer[3]);
-	printf("buffer4: %i\n", buffer[4]);
-	printf("inputfiledata address: %p\n", inputfiledata);
-	printf("inputfiledata: %i\n", *inputfiledata);
-	printf("filename: %s\n", filename);
-    //if (!buffer) { //why can't the pointer be zero?
-    //    printf("Failed to allocate memory!\n");
-    //    goto error;
-    //}
-    //fread(buffer, 1, len, file);
-	//*buffer=*file;
-    //fclose(file);
-    //file = NULL;
-
-    char* out_path = filename;
-    char* split = strrchr(out_path, '.');
-    const char* ext = NULL;
-
-    if (split) {
-        *split = '\0';
-        ext = split + 1;
-
-        if (strcasecmp(ext, "srm") == 0)
-            strcat(out_path, ".sav");
-        else if (strlen(ext) >= 3)
-            strcat(out_path, ".srm");
-        else
-            ext = NULL;
-    }
-
-    if (!ext) {
-        printf("Cannot detect extension!\n");
-        goto error;
-    }
-
-    enum save_type type = detect_save_type(buffer, len);
-    printf("Detected save type: %s\n", save_type_to_string(type));
-
-    if (type == SAVE_UNKNOWN) {
-        printf("Cannot infer save type ...\n");
-        goto error;
-    }
-	printf("out_path: %s\n",out_path);
-    FILE* outfile;
-	outfile = fopen(out_path, "wb");
-    if (!outfile)
-        goto error;
-
-    if (len == (0x20000 + 0x2000))
-        dump_sav(outfile, buffer, type);
-    else
-        dump_srm(outfile, buffer, type);
-    fclose(outfile);
-	
-	//FILE* testfile;
-	//int whatever[]={9,9,9,9};
-	//testfile=fopen("data/test.txt", "wb");
-	//fwrite(whatever, 1, sizeof(whatever), testfile);
-	//fclose(testfile);
-	
-	
-    return 0;
-
-error:
-    //if (file)
-    //    fclose(file);
-	printf("There was an error\n");
     return 1;
 }

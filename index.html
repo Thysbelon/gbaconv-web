@@ -23,77 +23,58 @@ function myClick(e){
 	reader.onloadend = (evt) => {
 		if (evt.target.readyState === FileReader.DONE) {
 			let arrayBuffer = evt.target.result
-			var array = new Uint8Array(arrayBuffer);
-			FS.mkdir('/data');
-			FS.mount(IDBFS, {}, '/data');
-			//FS.syncfs(true, function (err) {
-			//	// handle callback
-			//	console.log("syncfs error: "+err);
-			//});
-			Module.ccall(
-				"GBAConv",
-				"number",
-				["number", "number", "string"],
-				[array, array.length, filename]
-			)
-			FS.syncfs(false, function (err) {
+			var data = new Uint8Array(arrayBuffer);
+			for (let i=0; i<10; i++) {
+				console.log(data[i])
+			}
+			FS.syncfs(true, function (err) {
 				// handle callback
-				console.log("syncFS 2 error: "+err);
-			})
-			if (filename.includes("srm")){filename=filename.replace("srm", "sav")} else {filename=filename.replace("sav", "srm")}
-			let db;
-			const request = indexedDB.open("/data");
-			request.onsuccess = (event) => {
-				db = event.target.result;
-				db.transaction("FILE_DATA").objectStore("FILE_DATA").get( "/"+filename ).onsuccess = (event) => {
-					var savedataObj=event.target.result.contents
-					savedataValues=Object.values(savedataObj) // array
-					//const buffer=new ArrayBuffer(romdataValues.length)
-					//const view = new Uint8Array(buffer);
-					const savedata8array = Uint8Array.from(savedataValues);
-					
-					const file = new File([savedata8array], e.target.files[0].name.replace(/\.\w\w\w/, "."+filename.slice(-3) ) )
-					download(file)
-				};
-			};
+				console.log("syncfs error: "+err);
+				FS.mkdir('/data');
+				FS.mount(IDBFS, {}, '/data');
+				FS.writeFile("/"+filename, data, {flags:"w+"})
+				Module.ccall(
+					"GBAConv",
+					"number",
+					["string"],
+					["/"+filename]
+				)
+				FS.syncfs(false, function (err) {
+					// handle callback
+					console.log("syncFS 2 error: "+err);
+					if (filename.includes("srm")){filename=filename.replace("srm", "sav")} else {filename=filename.replace("sav", "srm")}
+					let db;
+					const request = indexedDB.open("/data");
+					request.onsuccess = (event) => {
+						db = event.target.result;
+						db.transaction("FILE_DATA").objectStore("FILE_DATA").get( "/"+filename ).onsuccess = (event) => {
+							var savedataObj=event.target.result.contents
+							savedataValues=Object.values(savedataObj) // array
+							//const buffer=new ArrayBuffer(romdataValues.length)
+							//const view = new Uint8Array(buffer);
+							const savedata8array = Uint8Array.from(savedataValues);
+							
+							const file = new File([savedata8array], e.target.files[0].name.replace(/\.\w\w\w/, "."+filename.slice(-3) ) )
+							download(file)
+							//var req = indexedDB.deleteDatabase("/data");
+							//req.onsuccess = function () {
+							//	console.log("Deleted database successfully");
+							//};
+							//FS.unlink("/data/savedata.sav")
+							//FS.unlink("/data/savedata.srm")
+							//FS.unmount('/data');
+							//FS.rmdir("/data")
+							window.location.reload(); // I tried so hard to make this app work without reloading, but all of my attempts to delete the contents of memfs failed. I give up.
+						};
+					};
+				})
+				
+			});
+			
 		}
 	}
 	
 }
-
-//function exportfiles(){
-//	let db;
-//	const request = indexedDB.open("cjFS_/files/");
-//	request.onsuccess = (event) => {
-//		db = event.target.result;
-//		/*db.transaction("files").objectStore("files").get("test-output.gbc").onsuccess = (event) => {
-//			var romdataObj=event.target.result.contents
-//			romdataValues=Object.values(romdataObj) // array
-//			//const buffer=new ArrayBuffer(romdataValues.length)
-//			//const view = new Uint8Array(buffer);
-//			const romdata8array = Uint8Array.from(romdataValues);
-//			
-//			const file = new File([romdata8array], 'test-output.gbc')
-//			download(file)
-//		};*/
-//		db.transaction("files").objectStore("files").getAll().onsuccess = (event) => {
-//			files=event.target.result
-//			filenames=files[0].contents
-//			files.shift()
-//			for (let i=0, l=files.length; i<l; i++) {
-//				const file = new File([files[i].contents], filenames[i].substring(1))
-//				download(file)
-//			}
-//			/*var romdataObj=event.target.result.contents
-//			romdataValues=Object.values(romdataObj) // array
-//			const romdata8array = Uint8Array.from(romdataValues);
-//			
-//			const file = new File([romdata8array], 'test-output.gbc')
-//			download(file)*/
-//		};
-//	};
-//
-//}
 
 function download(file) {
 	const link = document.createElement('a')
