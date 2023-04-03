@@ -19,7 +19,7 @@ function myClick(e){
 	// replace 4gs with srm
 	// replace whatever the file name is with savedata, c can't handle paths with spaces !!!!
 	// c can't write to any directory other than the mounted one !!!!
-	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace("4gs", "srm")
+	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace(".4gs", ".srm")
 	console.log(filename)
 	const reader=new FileReader();
 	reader.readAsArrayBuffer(e.target.files[0]);
@@ -45,7 +45,7 @@ function myClick(e){
 				FS.syncfs(false, function (err) {
 					// handle callback
 					console.log("syncFS 2 error: "+err);
-					if (filename.includes("srm")){filename=filename.replace("srm", "sav")} else {filename=filename.replace("sav", "srm")}
+					if (filename.includes(".srm")){filename=filename.replace(".srm", ".sav")} else {filename=filename.replace(".sav", ".srm")}
 					let db;
 					const request = indexedDB.open("/data");
 					request.onsuccess = (event) => {
