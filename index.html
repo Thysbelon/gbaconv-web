@@ -5,21 +5,22 @@
 <meta name=color-scheme content=dark>
 <meta name=viewport content=width=device-width,initial-scale=1.0>
 <script src=gbaconv-web.js></script>
+<script src=pako.min.js></script>
 </head>
 <body>
 <h1>GBA 4gs, srm and sav Converter</h1>
 <p><a href=https://github.com/Thysbelon/gbaconv-web/issues><strong><em>Please</em></strong> let me know if this tool doesn't work</a>. I put a lot of effort into making this, and I don't want that effort to go to waste.
 <p>
 <label for=savpicker>Select save file: </label>
-<input type=file id=savpicker accept=.srm,.sav,.4gs>
+<input type=file id=savpicker accept=.srm,.sav,.4gs,.4gz>
 <script>
 const savpicker=document.getElementById("savpicker")
 savpicker.addEventListener('change', myClick);
 function myClick(e){
 	// replace 4gs with srm
-	// replace whatever the file name is with savedata, c can't handle paths with spaces !!!!
-	// c can't write to any directory other than the mounted one !!!!
-	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace(".4gs", ".srm")
+	// replace whatever the file name is with "savedata", c can't handle paths with spaces !!!!
+	// emscripten can't write to any directory other than the mounted one !!!!
+	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace(".4gs", ".srm").replace(".4gz", ".srm")
 	console.log(filename)
 	const reader=new FileReader();
 	reader.readAsArrayBuffer(e.target.files[0]);
@@ -27,6 +28,9 @@ function myClick(e){
 		if (evt.target.readyState === FileReader.DONE) {
 			let arrayBuffer = evt.target.result
 			var data = new Uint8Array(arrayBuffer);
+			if (e.target.files[0].name.includes(".4gz")) {
+				data = pako.ungzip(toyEncrypt(data))
+			}
 			for (let i=0; i<10; i++) {
 				console.log(data[i])
 			}
@@ -91,4 +95,14 @@ function download(file) {
 	document.body.removeChild(link)
 	window.URL.revokeObjectURL(url)
 }
+
+// copy pasted from https://gba.44670.org/app.js
+function toyEncrypt(src) {
+	var dst = new Uint8Array(src.length)
+	for (var i = 0; i < src.length; i++) {
+		dst[i] = src[i] ^ 0xFB
+	}
+	return dst
+}
+
 </script>
