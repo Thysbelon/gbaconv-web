@@ -3,5 +3,8 @@ The srm to sav converter gbaconv compiled to WebAssembly. Converts [libretro VBA
 
 If you have any problems with this tool, *please* open an issue in the issue tab at the top of this page.
 
+## Note to iOS users:
+This webapp may not work on Safari; to workaround this issue, try using Chrome.
+
 ## For Developers:
 Build gbaconv-web.c by running `emcc -O0 gbaconv-web.c -o gbaconv-web.js -sEXPORTED_RUNTIME_METHODS=ccall,cwrap -lidbfs.js` in a linux terminal with emscripten installed.
