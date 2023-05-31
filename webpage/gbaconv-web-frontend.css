@@ -1,0 +1,68 @@
+@font-face {
+	font-family:Kiwi-Maru;
+	font-style:normal;
+	font-display:fallback;
+	src:url(https://thysbelon.github.io/KiwiMaru-en-ext3.woff2);
+}
+@font-face {
+	font-family:Silkscreen;
+	font-style:normal;
+	font-weight:bold;
+	src:url(https://fonts.bunny.net/silkscreen/files/silkscreen-latin-400-normal.woff2) format('woff2');
+}
+:root {
+	--blue:blue;
+}
+@media (prefers-color-scheme:dark) {
+	:root {
+		--blue:cornflowerblue;
+	}
+}
+body {
+	max-width:44em;
+	margin-left:auto;
+	margin-right:auto;
+	font-family: Kiwi-Maru, sans-serif;
+}
+
+h1 {
+	text-align:center;
+	font-family: Silkscreen, serif;
+}
+
+h1 span{
+	color:fuchsia;
+	position:relative;
+	/*display:inline-block; causes words to break*/
+	animation: 2s linear var(--dly) 1 forwards running colorchange-and-bounce;
+	--dly:1s;
+}
+
+@keyframes colorchange-and-bounce {
+	0% {color:fuchsia}
+	10% {color:red}
+	15% {color:orange}
+	19.5% {bottom:0em}
+	20% {color:yellow; bottom:0.3em}
+	20.5% {bottom:0.6em}
+	21% {bottom:0.8em} /*21% {transform:translate(0,-0.8em)}*/
+	30% {color:lime}
+	40% {color:cyan}
+	50% {color:var(--blue); bottom:.8em}
+	52% {bottom:.4em}
+	55% {bottom:0em}
+	60% {bottom:0em}
+	61% {bottom:.1em}
+	62% {bottom:.4em}
+	65% {bottom:.4em}
+	66% {bottom:0em}
+	67% {bottom:0em}
+	68% {bottom:.1em}
+	70% {bottom:.1em}
+	71% {bottom:0em}
+	72% {bottom:0em}
+	72% {bottom:.05em}
+	74% {bottom:.05em}
+	75% {bottom:0em}
+	100% {color:var(--blue)}
+}

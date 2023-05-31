@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+<meta charset=utf-8>
+<title>GBA 4gz, 4gs, srm and sav Converter</title>
+<meta name=color-scheme content="light dark">
+<meta name=viewport content=width=device-width,initial-scale=1.0>
+<script src=minified-assets/gbaconv-web.js></script>
+<script src=minified-assets/pako.min.js></script>
+<link rel=preconnect href=https://fonts.bunny.net>
+<link rel=stylesheet href=gbaconv-web-frontend.css>
+</head>
+<body>
+<h1><span>G</span><span style=--dly:1.1s>B</span><span style=--dly:1.2s>A</span> <span style=--dly:1.3s>4</span><span style=--dly:1.4s>g</span><span style=--dly:1.5s>z</span><span style=--dly:1.6s>,</span> <span style=--dly:1.7s>4</span><span style=--dly:1.8s>g</span><span style=--dly:1.9s>s</span><span style=--dly:2s>,</span> <span style=--dly:2.1s>s</span><span style=--dly:2.2s>r</span><span style=--dly:2.3s>m</span> <span style=--dly:2.4s>a</span><span style=--dly:2.5s>n</span><span style=--dly:2.6s>d</span> <span style=--dly:2.7s>s</span><span style=--dly:2.8s>a</span><span style=--dly:2.9s>v</span> <span style=--dly:3s>C</span><span style=--dly:3.1s>o</span><span style=--dly:3.2s>n</span><span style=--dly:3.3s>v</span><span style=--dly:3.4s>e</span><span style=--dly:3.5s>r</span><span style=--dly:3.6s>t</span><span style=--dly:3.7s>e</span><span style=--dly:3.8s>r</span></h1>
+<p>This webapp can be used to convert 4gz and 4gs/srm files to sav, and sav to 4gs/srm.
+<p>All of these file extensions are used to mark different formats for storing <b>GBA game save data</b>.
+<p>sav is the universal format. 4gs/srm is a format used only by three specific emulators: <a href=https://github.com/libretro/vbam-libretro>the libretro fork of VBA-M</a>, <a href=https://github.com/libretro/vba-next>VBA-Next</a> and <a href=https://gba.44670.org>44VBA</a>. <a href=https://emulation.gametechwiki.com/index.php/Game_Boy_Advance_emulators#Save_formats>More information here.</a>
+<p><a href=https://github.com/Thysbelon/gbaconv-web/issues><strong><em>Please</em></strong> let me know if this tool doesn't work</a>. I put a lot of effort into making this, and I don't want that effort to go to waste.
+<!--<p><strong>This tool does not support SRAM-type save files.</strong> You can refer to <a href=https://raw.githubusercontent.com/mamedev/mame/master/hash/gba.xml>MAME's gba.xml file</a> for a mostly accurate list of GBA games and their save types (under "&lt;feature name="slot" "). (Use the shortcut "Ctrl+F" or "Find in page" in the three vertical dots menu to search quickly.)-->
+<p>
+<label for=savpicker>Select save file: </label>
+<input type=file id=savpicker accept=.srm,.sav,.4gs,.4gz>
+<hr>
+<p><a href=https://github.com/Thysbelon/gbaconv-web>GitHub repository.</a>
+<script src=gbaconv-web-frontend.js></script>
