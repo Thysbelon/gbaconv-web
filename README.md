@@ -7,4 +7,4 @@ If you have any problems with this tool, *please* open an issue in the issue tab
 This webapp may not work on Safari; to workaround this issue, try using Chrome.
 
 ## For Developers:
-Build gbaconv-web.c by running `emcc -O0 gbaconv-web.c -o gbaconv-web.js -sEXPORTED_RUNTIME_METHODS=ccall,cwrap -lidbfs.js` in a linux terminal with emscripten installed.
+Build gbaconv-web.c by running `emcc -O3 gbaconv-web.c -o gbaconv-web.js -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,UTF8ToString -lidbfs.js` in a linux terminal with emscripten installed.

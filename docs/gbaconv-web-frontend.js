@@ -55,7 +55,9 @@ function myClick(e){
 							//FS.unlink("/data/savedata.srm")
 							//FS.unmount('/data');
 							//FS.rmdir("/data")
-							window.location.reload(); // I tried so hard to make this app work without reloading, but all of my attempts to delete the contents of memfs failed. I give up.
+							if (typeof DebugOn === 'undefined') {
+								window.location.reload(); // I tried so hard to make this app work without reloading, but all of my attempts to delete the contents of memfs failed.
+							}
 						};
 					};
 				})

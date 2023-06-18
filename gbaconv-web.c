@@ -147,7 +147,8 @@ static void dump_sav(FILE* file, const uint8_t* data, enum save_type type)
 EMSCRIPTEN_KEEPALIVE
 int GBAConv(char* filename)
 {
-	printf("file \"%s\"\n", filename);
+	//printf("file \"%s\"\n", filename);
+	EM_ASM({console.log('filename: ' + Module.UTF8ToString($0));}, filename);
 	//if (argc != 2) {
 	//	fprintf(stderr, "Usage: %s <file>\n", argv[0]);
 	//	return 1;
@@ -156,6 +157,7 @@ int GBAConv(char* filename)
 	FILE* file = fopen(filename, "rb");
 	if (!file) {
 		fprintf(stderr, "Failed to open file \"%s\"\n", filename);
+		EM_ASM({console.log('Failed to open file ' + Module.UTF8ToString($0));}, filename);
 		goto error;
 	}
 
@@ -166,6 +168,7 @@ int GBAConv(char* filename)
 	uint8_t* buffer = malloc(len);
 	if (!buffer) {
 		fprintf(stderr, "Failed to allocate memory!\n");
+		EM_ASM({console.log('Failed to allocate memory');});
 		goto error;
 	}
 	fread(buffer, 1, len, file);
@@ -190,16 +193,21 @@ int GBAConv(char* filename)
 
 	if (!ext) {
 		fprintf(stderr, "Cannot detect extension!\n");
+		EM_ASM({console.log('Cannot detect extension!');});
 		goto error;
 	}
 	
-	printf("len: %ld\n", len);
+	//printf("len: %ld\n", len);
+	EM_ASM({console.log('len: ' + $0);}, len);
 	enum save_type type = detect_save_type(buffer, len);
-	printf("Detected save type: %s\n", save_type_to_string(type));
+	//printf("Detected save type: %s\n", save_type_to_string(type));
+	EM_ASM({console.log('Detected save type: ' + Module.UTF8ToString($0));}, save_type_to_string(type));
 
 	if (type == SAVE_UNKNOWN) {
-		fprintf(stderr, "Cannot infer save type ...\n");
-		printf("Assuming a save type of SRAM.\n");
+		//fprintf(stderr, "Cannot infer save type ...\n");
+		//printf("Assuming a save type of SRAM.\n");
+		EM_ASM({console.log('Cannot infer save type ...');});
+		EM_ASM({console.log('Assuming a save type of SRAM.');});
 		//goto error;
 	}
 

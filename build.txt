@@ -1,0 +1,1 @@
+emcc -O3 gbaconv-web.c -o gbaconv-web.js -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,UTF8ToString -lidbfs.js
