@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset=utf-8>
+<title>ＧＢＡの４ＧＺ、４ＧＳ、ＳＲＭ、ＳＡＶのコンバータ - デバグのモード</title>
+<meta name=color-scheme content="light dark">
+<meta name=viewport content=width=device-width,initial-scale=1.0>
+<script src=minified-assets/gbaconv-web.js></script>
+<script src=minified-assets/pako.min.js></script>
+<link rel=preconnect href=https://fonts.bunny.net>
+<link rel=stylesheet href=gbaconv-web-frontend.css>
+<script src=DebugOn.js></script>
+</head>
+<body>
+<h1>ＧＢＡの４ＧＺ、４ＧＳ、ＳＲＭ、ＳＡＶの<br>コンバータ</h1>
+<p>これはデバグのモード。<a href=日本語.html>ノーマルのモード</a>
+<p>デバグのテクストを画面に保つために、このモードは各コンバートのあとにページをひとりでにリフレッシュしないです。あなたは１つのリフレッシュについて１つのコンバートのみをできます。
+<p>ウェブアプリを使ってあなたが抱えていた問題を再現してください。引き続き、デバグの出力とできるだけ詳しいい記述を<a href=https://github.com/Thysbelon/gbaconv-web/issues>Issueのページ</a>に新しいIssueに打ち込んでください。（それに、僕は日本語が流暢じゃないことを知ってください。）
+<!-- debug outputとdescriptionをnew issueにwrite -->
+<p>
+<label for=savpicker>セーブのファイルを選んでください：</label>
+<input type=file id=savpicker accept=.srm,.sav,.4gs,.4gz>
+<hr>
+<p>デバグの出力：
+<pre id=debug>
+</pre>
+<hr>
+<p><a href=https://github.com/Thysbelon/gbaconv-web>GitHubのリポジトリ</a>
+<script src=gbaconv-web-frontend.js></script>
+<script src=consoleOverride.js></script>

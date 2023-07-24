@@ -5,10 +5,28 @@
 	src:url(https://thysbelon.github.io/KiwiMaru-en-ext3.woff2);
 }
 @font-face {
+	font-family:Kiwi Maru;
+	font-style:normal;
+	font-display:fallback;
+	src:url(https://thysbelon.github.io/kiwi-maru-japanese.woff2);
+}
+@font-face {
 	font-family:Silkscreen;
 	font-style:normal;
 	font-weight:bold;
 	src:url(https://fonts.bunny.net/silkscreen/files/silkscreen-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+	font-family:DotGothic16;
+	font-style:normal;
+	font-weight:bold;
+	src:url(https://fonts.bunny.net/dotgothic16/files/dotgothic16-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+	font-family:DotGothic16;
+	font-style:normal;
+	font-weight:bold;
+	src:url(https://fonts.bunny.net/dotgothic16/files/dotgothic16-japanese-400-normal.woff2) format('woff2');
 }
 :root {
 	--blue:blue;
@@ -22,12 +40,22 @@ body {
 	max-width:44em;
 	margin-left:auto;
 	margin-right:auto;
+}
+body {
+	font-family: Kiwi Maru, sans-serif;
+}
+body:lang(en) {
 	font-family: Kiwi-Maru, sans-serif;
 }
 
 h1 {
 	text-align:center;
+}
+h1 {
 	font-family: Silkscreen, serif;
+}
+h1:lang(ja) {
+	font-family: DotGothic16, serif;
 }
 
 h1 span{
