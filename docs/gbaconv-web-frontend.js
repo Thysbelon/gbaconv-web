@@ -4,7 +4,7 @@ function myClick(e){
 	// replace 4gs with srm
 	// replace whatever the file name is with "savedata", c can't handle paths with spaces !!!!
 	// emscripten can't write to any directory other than the mounted one !!!!
-	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace(".4gs", ".srm").replace(".4gz", ".srm")
+	var filename=e.target.files[0].name.replace(/.*\.(.*)/, "data/savedata.$1").replace(".4gs", ".srm").replace(".4gz", ".srm").replace(".44gbasav",".srm")
 	console.log(filename)
 	const reader=new FileReader();
 	reader.readAsArrayBuffer(e.target.files[0]);
