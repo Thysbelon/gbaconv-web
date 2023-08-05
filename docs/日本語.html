@@ -4,7 +4,7 @@
 <meta charset=utf-8>
 <title>ＧＢＡの４ＧＺ、４ＧＳ、ＳＲＭ、ＳＡＶのコンバータ</title>
 <meta name=color-scheme content="light dark">
-<meta name=viewport content=width=device-width,initial-scale=1.0>
+<meta name=viewport content="width=device-width,initial-scale=1.0">
 <script src=minified-assets/gbaconv-web.js></script>
 <script src=minified-assets/pako.min.js></script>
 <link rel=preconnect href=https://fonts.bunny.net>
@@ -12,15 +12,19 @@
 </head>
 <body>
 <!--ＧＢＡの４ＧＺ、４ＧＳ、ＳＲＭ、ＳＡＶのコンバータ-->
-<!--replace the pixel font with a subsetted copy-->
 <h1><span>Ｇ</span><span style=--dly:1.1s>Ｂ</span><span style=--dly:1.2s>Ａ</span><span style=--dly:1.3s>の</span><span style=--dly:1.4s>４</span><span style=--dly:1.5s>Ｇ</span><span style=--dly:1.6s>Ｚ</span><span style=--dly:1.7s>、</span><span style=--dly:1.8s>４</span><span style=--dly:1.9s>Ｇ</span><span style=--dly:2s>Ｓ</span><span style=--dly:2.1s>、</span><span style=--dly:2.2s>Ｓ</span><span style=--dly:2.3s>Ｒ</span><span style=--dly:2.4s>Ｍ</span><span style=--dly:2.5s>、</span><span style=--dly:2.6s>Ｓ</span><span style=--dly:2.7s>Ａ</span><span style=--dly:2.8s>Ｖ</span><span style=--dly:2.9s>の</span><br><span style=--dly:3s>コ</span><span style=--dly:3.1s>ン</span><span style=--dly:3.2s>バ</span><span style=--dly:3.3s>ー</span><span style=--dly:3.4s>タ</span></h1>
 <p>４ＧＺと４ＧＳ／ＳＲＭをＳＡＶに、およびＳＡＶを４ＧＳ／ＳＲＭにコンバートするためにこのウェブアプリを使えます。
 <p>これらのファイル拡張子はすべて<b>ＧＢＡのゲームのセーブのデータ</b>をストアしている色々な形式を指すために使われます。
 <p>ＳＡＶは一般な形式だ。４ＧＳ／ＳＲＭは３つの特定のエミュレータのみが使う形式だ：<a href=https://github.com/libretro/vbam-libretro>libretroのVBA-M</a>、<a href=https://github.com/libretro/vba-next>VBA-Next</a>、<a href=https://gba.44670.org>44VBA</a>。<a href=https://emulation-gametechwiki-com.translate.goog/index.php/Game_Boy_Advance_emulators?_x_tr_sl=auto&_x_tr_tl=ja&_x_tr_hl=ja#Save_formats>詳細がこちら</a>。
-<p><strong>このツールは機能しないなら</strong>、<a href=デバグ.html>デバグのモード</a>に行って、問題を報告するために指図に従ってください。僕はたくさんな努力でこれを作ったんだ、その努力を無駄遣いされたくない。
+<p><strong>このツールは機能しないなら</strong>、デバグの出力とできるだけ詳しいい記述をIssueのページに新しいIssueに打ち込んでください。（それに、僕は日本語が流暢じゃないことを知ってください。）僕はたくさんな努力でこれを作ったんだ、その努力を無駄遣いされたくない。
 <p>
 <label for=savpicker>セーブのファイルを選んでください：</label>
-<input type=file id=savpicker accept=.srm,.sav,.4gs,.4gz>
+<input type=file id=savpicker accept=.srm,.sav,.4gs,.4gz,.44gbasav>
 <hr>
-<p><a href=https://github.com/Thysbelon/gbaconv-web>GitHubのリポジトリ</a>, <a href=. lang="en">English</a>
+<p>Debug output:
+<pre id=debug>
+</pre>
+<hr>
+<p><a href=https://github.com/Thysbelon/gbaconv-web>GitHubのリポジトリ</a>、<a href=. lang="en">English</a>
 <script src=gbaconv-web-frontend.js></script>
+<script src=consoleOverride.js></script>
