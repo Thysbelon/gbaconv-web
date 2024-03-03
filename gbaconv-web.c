@@ -142,6 +142,23 @@ static void dump_sav(FILE* file, const uint8_t* data, enum save_type type)
 	}
 }
 
+static long removeRTCdata(const uint8_t* data, long len) {
+	switch (len) {
+		case 512:
+		case 0x2000:
+		case 0x10000:
+		case 0x20000:
+		case 0x8000:
+			EM_ASM({console.log('No RTC data detected.');});
+			return len;
+			break;
+		default:
+			EM_ASM({console.log('RTC data detected.');});
+			return len - 16;
+			break;
+	}
+}
+
 // One shot cowboy code :)
 
 EMSCRIPTEN_KEEPALIVE
@@ -199,6 +216,11 @@ int GBAConv(char* filename)
 	
 	//printf("len: %ld\n", len);
 	EM_ASM({console.log('len: ' + $0);}, len);
+	// remove RTC data. function that checks the size of the buffer, then cuts off the last 16 bytes of the buffer if the size does not match any save type. only runs for .sav files
+	//EM_ASM({console.log('ext: ' + Module.UTF8ToString($0));}, ext);
+	if (strcasecmp(ext, "srm") == 0) { // ext changes when the out_path changes (because strings are pointers), so if ext == "srm", that means the original file ext was "sav"
+		len = removeRTCdata(buffer, len);
+	}
 	enum save_type type = detect_save_type(buffer, len);
 	//printf("Detected save type: %s\n", save_type_to_string(type));
 	EM_ASM({console.log('Detected save type: ' + Module.UTF8ToString($0));}, save_type_to_string(type));
